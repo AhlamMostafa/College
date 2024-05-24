@@ -1,0 +1,129 @@
+MY Normal maze:
+لعبة عادية متاهة بيحث تعدل على المستويات عادي جدا 
+وهيتحرك يروح للبيت المربع البني 
+المفروض لما يوصل يبعت له رسالة انه وصلت وانتهت اللعبة المشكلة انه مابيبعتش غير كده الكود تمام 
+
+
+import turtle
+
+wn=turtle.Screen()
+wn.bgcolor("black")
+wn.title("A maze game")
+wn.setup(700,700)
+
+class pen(turtle.Turtle):
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.shape("square")
+        self.color("white")
+        self.penup()
+        self.speed(0)
+
+class Player(turtle.Turtle):
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.shape("square")
+        self.color("blue")
+        self.penup()
+        self.speed(0)
+    def go_down(self):
+        move_to_x=self.xcor()
+        move_to_y=self.ycor()-24
+
+        if (move_to_x,move_to_y) not in wall:
+            self.goto(move_to_x,move_to_y)
+        if move_to_y==y2 and move_to_x==x2:
+            self.goto(move_to_x,move_to_y)
+            print("You Win")
+
+    def go_up(self):
+        move_to_x = self.xcor()
+        move_to_y = self.ycor()+24
+
+        if (move_to_x, move_to_y) not in wall:
+            self.goto(move_to_x, move_to_y)
+
+    def go_right(self):
+        move_to_x = self.xcor()+24
+        move_to_y = self.ycor()
+
+        if (move_to_x, move_to_y) not in wall:
+            self.goto(move_to_x, move_to_y)
+
+    def go_left(self):
+        move_to_x = self.xcor()-24
+        move_to_y = self.ycor()
+
+        if (move_to_x, move_to_y) not in wall:
+            self.goto(move_to_x, move_to_y)
+
+class Home(turtle.Turtle):
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.shape("square")
+        self.color("brown")
+        self.penup()
+        self.speed(0)
+levels=[""]
+level_1=[
+"XXXXXXXXXXXXXXXXXXXXXXXX",
+"XP XXXXXXX         XXXXX",
+"X  XXXXXXX  XXXXX  XXXXX",
+"X       XX  XX     XXXXX",
+"X       XX  XX     XXXXX",
+"XXXXXX        XXXX  XXXX",
+"XXXXXX  XXXXXXXXXXXXXXXX",
+"X         XXXXXXXXXXXXXX",
+"X              XXXXXXXXX",
+"XXXXXXXXX      XXXXXX  X",
+"XXXXXXXXXXXXX  XXXXXX  X",
+"XXX  XXXXXXXX          X",
+"XXX                    X",
+"XXX            XXXXXXXXX",
+"XXXXXXXXXXXX   XXXXXXXXX",
+"XXXXXXXXXXXX           X",
+"XX    XXXXXX           X",
+"XX    XXXXXXXXXXX  XXXXX",
+"XX     XXXXXXXXXX  XXXXX",
+"XX        XXXXX        X",
+"XXX                    X",
+"XXXXXXXXXXXXXXXXXXXXXXHX",
+]
+levels.append(level_1)
+x2,y2=0,0
+def setup_maze(level):
+    for y in range(len(level)):
+        for x in range(len(level[y])):
+            character=level[y][x]
+            screen_x=-288+(x*24)
+            screen_y=288-(y*24)
+
+            if character=="X":
+                pen.goto(screen_x,screen_y)
+                pen.stamp()
+                wall.append((screen_x,screen_y))
+            if character=="P":
+                player.goto(screen_x,screen_y)
+
+            if character=="H":
+                home.goto(screen_x,screen_y)
+                x2=screen_x
+                y2=screen_y
+pen=pen()
+player=Player()
+home=Home()
+wall=[]
+setup_maze(levels[1])
+
+
+turtle.listen()
+turtle.onkeypress(player.go_left,"a")
+turtle.onkeypress(player.go_right,"d")
+turtle.onkeypress(player.go_up,"w")
+turtle.onkeypress(player.go_down,"s")
+wn.tracer(0)
+
+while True:
+    wn.update()
+
+wn.mainloop()
